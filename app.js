@@ -639,7 +639,7 @@ function exportEvaluation(data, format = 'json') {
     }
 }
 
-// Función para generar PDF
+// Función para generar PDF (versión mejorada de integrar2.js)
 function generatePDF() {
     if (!window.currentEvaluation) {
         showNotification('No hay evaluación para generar PDF', 'error');
@@ -660,24 +660,38 @@ function generatePDF() {
     doc.text(`Puesto: ${window.currentEvaluation.jobTitle}`, 20, 40);
     doc.text(`Fecha de evaluación: ${new Date(window.currentEvaluation.evaluationDate).toLocaleDateString()}`, 20, 50);
     
+    // Descripción del puesto
+    doc.setFontSize(14);
+    doc.setTextColor(67, 97, 238);
+    doc.text('Descripción del Puesto:', 20, 70);
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    const descriptionLines = doc.splitTextToSize(window.currentEvaluation.jobDescription || 'No especificado', 170);
+    doc.text(descriptionLines, 20, 80);
+    
+    // Responsabilidades
+    doc.setFontSize(14);
+    doc.setTextColor(67, 97, 238);
+    doc.text('Responsabilidades Principales:', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 20 : 110);
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    const responsibilitiesLines = doc.splitTextToSize(window.currentEvaluation.jobResponsibilities || 'No especificado', 170);
+    doc.text(responsibilitiesLines, 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 30 : 120);
+    
     // Resultados
     doc.setFontSize(16);
     doc.setTextColor(67, 97, 238);
-    doc.text('Resultados de Evaluación', 20, 70);
-    
-    doc.setFontSize(12);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Puntaje Total: ${window.currentEvaluation.scores.total}`, 20, 80);
-    doc.text(`Nivel: ${window.currentEvaluation.level.level}`, 20, 90);
+    doc.text('Resultados de Evaluación', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 50 : 150);
     
     // Tabla de puntajes
     doc.autoTable({
-        startY: 100,
+        startY: doc.previousAutoTable ? doc.previousAutoTable.finalY + 60 : 160,
         head: [['Componente', 'Puntaje']],
         body: [
             ['Know-How', window.currentEvaluation.scores.knowHow],
             ['Solución de Problemas', window.currentEvaluation.scores.problemSolving],
-            ['Responsabilidad', window.currentEvaluation.scores.responsibility]
+            ['Responsabilidad', window.currentEvaluation.scores.responsibility],
+            ['TOTAL', window.currentEvaluation.scores.total]
         ],
         theme: 'grid',
         headStyles: {
@@ -693,8 +707,8 @@ function generatePDF() {
     
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
-    const descriptionLines = doc.splitTextToSize(window.currentEvaluation.level.description, 170);
-    doc.text(descriptionLines, 20, doc.lastAutoTable.finalY + 30);
+    const levelLines = doc.splitTextToSize(window.currentEvaluation.level.description, 170);
+    doc.text(levelLines, 20, doc.lastAutoTable.finalY + 30);
     
     // Guardar el PDF
     doc.save(`Evaluacion_${window.currentEvaluation.jobTitle.replace(/\s+/g, '_')}.pdf`);
@@ -835,6 +849,46 @@ function evaluateJob() {
     
     // Guardar en memoria para posible exportación/guardado
     window.currentEvaluation = evaluationData;
+}
+
+// Función para resetear la evaluación (de integrar1.js)
+function resetEvaluation() {
+    window.currentEvaluation = null;
+    
+    // Limpiar campos de texto
+    document.getElementById('jobTitle').value = '';
+    document.getElementById('jobDescription').value = '';
+    document.getElementById('jobResponsibilities').value = '';
+    
+    // Resetear todos los selects
+    document.querySelectorAll('select').forEach(select => {
+        select.selectedIndex = 0;
+    });
+    
+    // Resetear resultados visuales
+    document.getElementById('totalScore').textContent = '0';
+    document.getElementById('jobLevel').textContent = 'Nivel 0';
+    document.getElementById('levelDescription').textContent = '';
+    document.getElementById('jobDescriptionResult').textContent = '';
+    document.getElementById('knowHowScore').textContent = '0 pts';
+    document.getElementById('problemSolvingScore').textContent = '0 pts';
+    document.getElementById('responsibilityScore').textContent = '0 pts';
+    
+    // Resetear barras de progreso
+    document.querySelectorAll('.progress-fill').forEach(bar => {
+        bar.style.width = '0%';
+    });
+    
+    // Resetear círculo de progreso
+    const circle = document.querySelector('.progress-ring-circle');
+    if (circle) {
+        const radius = circle.r.baseVal.value;
+        const circumference = 2 * Math.PI * radius;
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = circumference;
+    }
+    
+    goToSection('description-section');
 }
 
 // Añadir CSS para el diálogo de guardado
@@ -980,25 +1034,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Botón de nueva evaluación
-    document.getElementById('newEvalBtn')?.addEventListener('click', () => {
-        window.currentEvaluation = null;
-        document.getElementById('jobTitle').value = '';
-        document.getElementById('jobDescription').value = '';
-        document.getElementById('jobResponsibilities').value = '';
-        
-        // Resetear selects
-        document.querySelectorAll('select').forEach(select => {
-            select.selectedIndex = 0;
-        });
-        
-        goToSection('description-section');
-    });
+    document.getElementById('newEvalBtn')?.addEventListener('click', resetEvaluation);
     
     // Botón de nueva evaluación desde el header
-    document.getElementById('newEvaluationBtn')?.addEventListener('click', () => {
-        window.currentEvaluation = null;
-        goToSection('description-section');
-    });
+    document.getElementById('newEvaluationBtn')?.addEventListener('click', resetEvaluation);
     
     // Botón para generar PDF
     document.getElementById('generatePdfBtn')?.addEventListener('click', generatePDF);

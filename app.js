@@ -117,6 +117,13 @@ const evaluationData = {
     ]
 };
 
+// Variables globales
+window.currentEvaluation = null;
+window.evaluationCharts = {
+    levelDistribution: null,
+    scoreDistribution: null
+};
+
 // Función para mostrar notificaciones
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
@@ -149,12 +156,271 @@ function goToSection(sectionId) {
         step.classList.remove('active');
     });
     
-    document.getElementById(sectionId).classList.add('active');
-    document.querySelector(`.step[data-step="${sectionId.split('-')[0]}"]`).classList.add('active');
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.classList.add('active');
+    }
+    
+    const stepNumber = sectionId.split('-')[0];
+    const step = document.querySelector(`.step[data-step="${stepNumber}"]`);
+    if (step) {
+        step.classList.add('active');
+    }
     
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
+    });
+}
+
+// Función para cambiar entre contenidos principales
+function showContent(contentId) {
+    // Ocultar todos los contenidos
+    document.querySelectorAll('#evaluationContent, #evaluationsContent, #reportsContent, #settingsContent').forEach(content => {
+        content.classList.add('hidden-content');
+    });
+    
+    // Mostrar el contenido seleccionado
+    const content = document.getElementById(contentId);
+    if (content) {
+        content.classList.remove('hidden-content');
+    }
+    
+    // Actualizar navegación activa
+    document.querySelectorAll('.nav-links li').forEach(li => {
+        li.classList.remove('active');
+    });
+    
+    // Marcar como activo el elemento correspondiente
+    const activeLink = document.querySelector(`#${contentId.replace('Content', 'Link')}`);
+    if (activeLink) {
+        activeLink.parentElement.classList.add('active');
+    }
+    
+    // Cargar datos si es necesario
+    if (contentId === 'evaluationsContent') {
+        loadEvaluationsList();
+    } else if (contentId === 'reportsContent') {
+        loadReports();
+    }
+}
+
+// Función para cargar la lista de evaluaciones
+function loadEvaluationsList() {
+    const evaluationsList = document.getElementById('evaluationsList');
+    if (!evaluationsList) return;
+    
+    evaluationsList.innerHTML = '<p>Cargando evaluaciones...</p>';
+    
+    setTimeout(() => {
+        const evaluations = JSON.parse(localStorage.getItem('jobEvaluations')) || [];
+        
+        if (evaluations.length === 0) {
+            evaluationsList.innerHTML = '<p>No hay evaluaciones guardadas.</p>';
+            return;
+        }
+        
+        evaluationsList.innerHTML = '';
+        
+        evaluations.forEach(evaluation => {
+            const evaluationItem = document.createElement('div');
+            evaluationItem.className = 'evaluation-item';
+            evaluationItem.innerHTML = `
+                <div class="evaluation-info">
+                    <h3>${evaluation.jobTitle}</h3>
+                    <p>Nivel: ${evaluation.level.level} | Puntaje: ${evaluation.scores.total} | Fecha: ${new Date(evaluation.evaluationDate).toLocaleDateString()}</p>
+                </div>
+                <div class="evaluation-actions">
+                    <button class="btn btn-secondary view-evaluation" data-id="${evaluation.id}">
+                        <i class="fas fa-eye"></i> Ver
+                    </button>
+                    <button class="btn btn-secondary export-evaluation" data-id="${evaluation.id}">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                </div>
+            `;
+            evaluationsList.appendChild(evaluationItem);
+        });
+        
+        // Agregar event listeners a los botones
+        document.querySelectorAll('.view-evaluation').forEach(button => {
+            button.addEventListener('click', function() {
+                const evaluationId = parseInt(this.getAttribute('data-id'));
+                viewEvaluation(evaluationId);
+            });
+        });
+        
+        document.querySelectorAll('.export-evaluation').forEach(button => {
+            button.addEventListener('click', function() {
+                const evaluationId = parseInt(this.getAttribute('data-id'));
+                exportSavedEvaluation(evaluationId);
+            });
+        });
+    }, 500);
+}
+
+// Función para ver una evaluación guardada
+function viewEvaluation(id) {
+    const evaluations = JSON.parse(localStorage.getItem('jobEvaluations')) || [];
+    const evaluation = evaluations.find(e => e.id === id);
+    
+    if (!evaluation) {
+        showNotification('No se encontró la evaluación', 'error');
+        return;
+    }
+    
+    // Mostrar la evaluación en la sección de resultados
+    showContent('evaluationContent');
+    goToSection('results-section');
+    
+    // Mostrar resultados
+    document.getElementById('totalScore').textContent = evaluation.scores.total;
+    document.getElementById('jobLevel').textContent = evaluation.level.level;
+    document.getElementById('levelDescription').textContent = evaluation.level.description;
+    document.getElementById('jobDescriptionResult').textContent = evaluation.jobTitle;
+    
+    // Actualizar animaciones
+    animateProgressCircle(evaluation.scores.total);
+    document.getElementById('knowHowScore').textContent = `${evaluation.scores.knowHow} pts`;
+    document.getElementById('problemSolvingScore').textContent = `${evaluation.scores.problemSolving} pts`;
+    document.getElementById('responsibilityScore').textContent = `${evaluation.scores.responsibility} pts`;
+    
+    animateProgressBars({
+        knowHow: evaluation.scores.knowHow,
+        problemSolving: evaluation.scores.problemSolving,
+        responsibility: evaluation.scores.responsibility
+    });
+    
+    // Guardar en memoria para posible exportación/guardado
+    window.currentEvaluation = evaluation;
+}
+
+// Función para cargar reportes
+function loadReports() {
+    const evaluations = JSON.parse(localStorage.getItem('jobEvaluations')) || [];
+    
+    if (evaluations.length === 0) {
+        document.getElementById('reportsContainer').innerHTML = '<p>No hay suficientes datos para generar reportes.</p>';
+        return;
+    }
+    
+    // Preparar datos para los gráficos
+    const levelCounts = {};
+    const scores = evaluations.map(e => e.scores.total);
+    
+    evaluationData.jobLevels.forEach(level => {
+        levelCounts[level.level] = evaluations.filter(e => 
+            e.scores.total >= level.min && e.scores.total <= level.max
+        ).length;
+    });
+    
+    // Crear o actualizar gráficos
+    createLevelDistributionChart(levelCounts);
+    createScoreDistributionChart(scores);
+}
+
+// Función para crear gráfico de distribución por nivel
+function createLevelDistributionChart(levelCounts) {
+    const ctx = document.getElementById('levelDistributionChart').getContext('2d');
+    
+    // Destruir gráfico anterior si existe
+    if (window.evaluationCharts.levelDistribution) {
+        window.evaluationCharts.levelDistribution.destroy();
+    }
+    
+    const labels = Object.keys(levelCounts);
+    const data = Object.values(levelCounts);
+    const backgroundColors = [
+        '#4361ee', '#3f37c9', '#4cc9f0', '#4895ef', '#560bad',
+        '#b5179e', '#f72585'
+    ];
+    
+    window.evaluationCharts.levelDistribution = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución por Nivel',
+                    font: {
+                        size: 16
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Función para crear gráfico de distribución de puntajes
+function createScoreDistributionChart(scores) {
+    const ctx = document.getElementById('scoreDistributionChart').getContext('2d');
+    
+    // Destruir gráfico anterior si existe
+    if (window.evaluationCharts.scoreDistribution) {
+        window.evaluationCharts.scoreDistribution.destroy();
+    }
+    
+    // Crear rangos de puntajes
+    const ranges = [
+        '0-200', '201-400', '401-600', '601-800', '801-1000', '1001-1200', '1201-1400'
+    ];
+    
+    const counts = ranges.map(range => {
+        const [min, max] = range.split('-').map(Number);
+        return scores.filter(score => score >= min && score <= max).length;
+    });
+    
+    window.evaluationCharts.scoreDistribution = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ranges,
+            datasets: [{
+                label: 'Número de Evaluaciones',
+                data: counts,
+                backgroundColor: '#4361ee',
+                borderColor: '#3f37c9',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Evaluaciones'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Rango de Puntajes'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribución de Puntajes',
+                    font: {
+                        size: 16
+                    }
+                }
+            }
+        }
     });
 }
 
@@ -308,6 +574,19 @@ function saveEvaluationToLocal(data) {
     }
 }
 
+// Función para exportar una evaluación guardada
+function exportSavedEvaluation(id) {
+    const evaluations = JSON.parse(localStorage.getItem('jobEvaluations')) || [];
+    const evaluation = evaluations.find(e => e.id === id);
+    
+    if (!evaluation) {
+        showNotification('No se encontró la evaluación', 'error');
+        return;
+    }
+    
+    exportEvaluation(evaluation);
+}
+
 // Función mejorada para exportar evaluación
 function exportEvaluation(data, format = 'json') {
     try {
@@ -341,7 +620,7 @@ function exportEvaluation(data, format = 'json') {
         }
         
         const blob = new Blob([content], { type: mimeType });
-        const url = URL.createobjectURL(blob);
+        const url = URL.createObjectURL(blob);
         
         const a = document.createElement('a');
         a.href = url;
@@ -358,6 +637,68 @@ function exportEvaluation(data, format = 'json') {
         showNotification('Error al exportar la evaluación', 'error');
         return false;
     }
+}
+
+// Función para generar PDF
+function generatePDF() {
+    if (!window.currentEvaluation) {
+        showNotification('No hay evaluación para generar PDF', 'error');
+        return;
+    }
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Título
+    doc.setFontSize(20);
+    doc.setTextColor(67, 97, 238);
+    doc.text('Evaluación de Puesto', 105, 20, { align: 'center' });
+    
+    // Información básica
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Puesto: ${window.currentEvaluation.jobTitle}`, 20, 40);
+    doc.text(`Fecha de evaluación: ${new Date(window.currentEvaluation.evaluationDate).toLocaleDateString()}`, 20, 50);
+    
+    // Resultados
+    doc.setFontSize(16);
+    doc.setTextColor(67, 97, 238);
+    doc.text('Resultados de Evaluación', 20, 70);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Puntaje Total: ${window.currentEvaluation.scores.total}`, 20, 80);
+    doc.text(`Nivel: ${window.currentEvaluation.level.level}`, 20, 90);
+    
+    // Tabla de puntajes
+    doc.autoTable({
+        startY: 100,
+        head: [['Componente', 'Puntaje']],
+        body: [
+            ['Know-How', window.currentEvaluation.scores.knowHow],
+            ['Solución de Problemas', window.currentEvaluation.scores.problemSolving],
+            ['Responsabilidad', window.currentEvaluation.scores.responsibility]
+        ],
+        theme: 'grid',
+        headStyles: {
+            fillColor: [67, 97, 238],
+            textColor: [255, 255, 255]
+        }
+    });
+    
+    // Descripción del nivel
+    doc.setFontSize(14);
+    doc.setTextColor(67, 97, 238);
+    doc.text('Descripción del Nivel:', 20, doc.lastAutoTable.finalY + 20);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    const descriptionLines = doc.splitTextToSize(window.currentEvaluation.level.description, 170);
+    doc.text(descriptionLines, 20, doc.lastAutoTable.finalY + 30);
+    
+    // Guardar el PDF
+    doc.save(`Evaluacion_${window.currentEvaluation.jobTitle.replace(/\s+/g, '_')}.pdf`);
+    showNotification('PDF generado correctamente', 'success');
 }
 
 // Función para mostrar diálogo de opciones de guardado
@@ -433,9 +774,9 @@ function handleSaveResult(result, type) {
             : 'Evaluación guardada en la nube';
         showNotification(message, 'success');
         
-        // Actualizar lista de evaluaciones si existe esa funcionalidad
-        if (typeof updateEvaluationsList === 'function') {
-            updateEvaluationsList();
+        // Actualizar lista de evaluaciones si estamos en esa vista
+        if (document.getElementById('evaluationsContent') && !document.getElementById('evaluationsContent').classList.contains('hidden-content')) {
+            loadEvaluationsList();
         }
     } else {
         showNotification(`Error al guardar ${type === 'local' ? 'localmente' : 'en la nube'}: ${result.error}`, 'error');
@@ -580,6 +921,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
     
+    // Navegación principal
+    document.getElementById('homeLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showContent('evaluationContent');
+    });
+    
+    document.getElementById('evaluationsLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showContent('evaluationsContent');
+    });
+    
+    document.getElementById('reportsLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showContent('reportsContent');
+    });
+    
+    document.getElementById('settingsLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showContent('settingsContent');
+    });
+    
     // Navegación entre pasos
     document.querySelectorAll('.step').forEach(step => {
         step.addEventListener('click', function() {
@@ -599,7 +961,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Botón de evaluación
     document.getElementById('evaluateBtn')?.addEventListener('click', evaluateJob);
     
-    // Botón de guardar (ahora muestra el diálogo de opciones)
+    // Botón de guardar
     document.getElementById('saveBtn')?.addEventListener('click', () => {
         if (window.currentEvaluation) {
             showSaveOptionsDialog();
@@ -611,8 +973,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Botón de exportar
     document.getElementById('exportBtn')?.addEventListener('click', () => {
         if (window.currentEvaluation) {
-            // Podrías añadir aquí un diálogo para seleccionar formato
-            exportEvaluation(window.currentEvaluation, 'json'); // o 'csv'
+            exportEvaluation(window.currentEvaluation, 'json');
         } else {
             showNotification('No hay evaluación para exportar', 'error');
         }
@@ -639,8 +1000,10 @@ document.addEventListener('DOMContentLoaded', function() {
         goToSection('description-section');
     });
     
-    // Botón para generar PDF (simulado)
-    document.getElementById('generatePdfBtn')?.addEventListener('click', () => {
-        showNotification('Función de PDF en desarrollo', 'warning');
-    });
+    // Botón para generar PDF
+    document.getElementById('generatePdfBtn')?.addEventListener('click', generatePDF);
+    
+    // Configuración inicial
+    showContent('evaluationContent');
+    goToSection('description-section');
 });

@@ -237,6 +237,9 @@ function loadEvaluationsList() {
                     <button class="btn btn-secondary export-evaluation" data-id="${evaluation.id}">
                         <i class="fas fa-download"></i> Exportar
                     </button>
+                    <button class="btn btn-secondary delete-evaluation" data-id="${evaluation.id}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
                 </div>
             `;
             evaluationsList.appendChild(evaluationItem);
@@ -256,7 +259,25 @@ function loadEvaluationsList() {
                 exportSavedEvaluation(evaluationId);
             });
         });
+        
+        document.querySelectorAll('.delete-evaluation').forEach(button => {
+            button.addEventListener('click', function() {
+                const evaluationId = parseInt(this.getAttribute('data-id'));
+                deleteEvaluation(evaluationId);
+            });
+        });
     }, 500);
+}
+
+// Función para eliminar una evaluación
+function deleteEvaluation(id) {
+    if (confirm('¿Está seguro que desea eliminar esta evaluación?')) {
+        let evaluations = JSON.parse(localStorage.getItem('jobEvaluations')) || [];
+        evaluations = evaluations.filter(e => e.id !== id);
+        localStorage.setItem('jobEvaluations', JSON.stringify(evaluations));
+        showNotification('Evaluación eliminada correctamente', 'success');
+        loadEvaluationsList();
+    }
 }
 
 // Función para ver una evaluación guardada
@@ -551,6 +572,65 @@ function animateProgressBars(scores) {
     });
 }
 
+// Función para guardar evaluaciones en CSV
+function saveEvaluationsToCSV(evaluations) {
+    const headers = [
+        'ID', 'Título del Puesto', 'Descripción', 'Responsabilidades', 
+        'Fecha de Evaluación', 'Puntaje Total', 'Nivel', 
+        'Know-How', 'Solución de Problemas', 'Responsabilidad'
+    ];
+    
+    const rows = evaluations.map(evaluation => [
+        evaluation.id,
+        `"${evaluation.jobTitle.replace(/"/g, '""')}"`,
+        `"${(evaluation.jobDescription || '').replace(/"/g, '""')}"`,
+        `"${(evaluation.jobResponsibilities || '').replace(/"/g, '""')}"`,
+        new Date(evaluation.evaluationDate).toISOString(),
+        evaluation.scores.total,
+        `"${evaluation.level.level.replace(/"/g, '""')}"`,
+        evaluation.scores.knowHow,
+        evaluation.scores.problemSolving,
+        evaluation.scores.responsibility
+    ]);
+    
+    const csvContent = [headers, ...rows]
+        .map(row => row.join(','))
+        .join('\n');
+    
+    return csvContent;
+}
+
+// Función para descargar CSV
+function downloadCSV(content, filename) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+// Función para guardar evaluaciones en archivo CSV local
+function saveEvaluationsToLocalCSV() {
+    const evaluations = JSON.parse(localStorage.getItem('jobEvaluations')) || [];
+    
+    if (evaluations.length === 0) {
+        showNotification('No hay evaluaciones para guardar', 'warning');
+        return;
+    }
+    
+    const csvContent = saveEvaluationsToCSV(evaluations);
+    const filename = `evaluaciones_${new Date().toISOString().slice(0,10)}.csv`;
+    
+    downloadCSV(csvContent, filename);
+    showNotification('Evaluaciones guardadas en archivo CSV', 'success');
+}
+
 // Función mejorada para guardar en LocalStorage
 function saveEvaluationToLocal(data) {
     try {
@@ -566,6 +646,9 @@ function saveEvaluationToLocal(data) {
         
         evaluations.push(evaluationWithMeta);
         localStorage.setItem('jobEvaluations', JSON.stringify(evaluations));
+        
+        // Guardar también en CSV
+        saveEvaluationsToLocalCSV();
         
         return { success: true, id: evaluationWithMeta.id };
     } catch (error) {
@@ -727,13 +810,11 @@ function showSaveOptionsDialog() {
                 <button id="saveLocalBtn" class="btn btn-option">
                     <i class="fas fa-laptop"></i> Solo en este navegador
                 </button>
-                ${window.db ? `
-                <button id="saveCloudBtn" class="btn btn-option">
-                    <i class="fas fa-cloud"></i> En la nube (accesible desde cualquier dispositivo)
+                <button id="saveCSVBtn" class="btn btn-option">
+                    <i class="fas fa-file-csv"></i> Guardar en archivo CSV
                 </button>
-                ` : ''}
                 <button id="saveBothBtn" class="btn btn-option">
-                    <i class="fas fa-sync-alt"></i> En ambos lugares
+                    <i class="fas fa-sync-alt"></i> En ambos formatos
                 </button>
                 <button id="saveCancelBtn" class="btn btn-cancel">
                     <i class="fas fa-times"></i> Cancelar
@@ -751,30 +832,22 @@ function showSaveOptionsDialog() {
         dialog.remove();
     });
     
-    if (window.db) {
-        document.getElementById('saveCloudBtn').addEventListener('click', async () => {
-            const result = await saveEvaluationToFirestore(window.currentEvaluation);
-            handleSaveResult(result, 'cloud');
-            dialog.remove();
-        });
+    document.getElementById('saveCSVBtn').addEventListener('click', () => {
+        saveEvaluationsToLocalCSV();
+        dialog.remove();
+    });
+    
+    document.getElementById('saveBothBtn').addEventListener('click', () => {
+        const localResult = saveEvaluationToLocal(window.currentEvaluation);
+        saveEvaluationsToLocalCSV();
         
-        document.getElementById('saveBothBtn').addEventListener('click', async () => {
-            const localResult = saveEvaluationToLocal(window.currentEvaluation);
-            const cloudResult = await saveEvaluationToFirestore(window.currentEvaluation);
-            
-            if (localResult.success && cloudResult.success) {
-                showNotification('Evaluación guardada en ambos lugares', 'success');
-            } else if (!localResult.success && !cloudResult.success) {
-                showNotification('Error al guardar en ambos lugares', 'error');
-            } else {
-                showNotification(
-                    `Evaluación guardada solo ${localResult.success ? 'localmente' : 'en la nube'}`,
-                    localResult.success || cloudResult.success ? 'warning' : 'error'
-                );
-            }
-            dialog.remove();
-        });
-    }
+        if (localResult.success) {
+            showNotification('Evaluación guardada en ambos formatos', 'success');
+        } else {
+            showNotification('Error al guardar localmente, pero CSV se generó', 'warning');
+        }
+        dialog.remove();
+    });
     
     document.getElementById('saveCancelBtn').addEventListener('click', () => {
         dialog.remove();
@@ -785,7 +858,7 @@ function handleSaveResult(result, type) {
     if (result.success) {
         const message = type === 'local' 
             ? 'Evaluación guardada localmente' 
-            : 'Evaluación guardada en la nube';
+            : 'Evaluación guardada en CSV';
         showNotification(message, 'success');
         
         // Actualizar lista de evaluaciones si estamos en esa vista
@@ -793,7 +866,7 @@ function handleSaveResult(result, type) {
             loadEvaluationsList();
         }
     } else {
-        showNotification(`Error al guardar ${type === 'local' ? 'localmente' : 'en la nube'}: ${result.error}`, 'error');
+        showNotification(`Error al guardar ${type === 'local' ? 'localmente' : 'en CSV'}: ${result.error}`, 'error');
     }
 }
 
@@ -1041,6 +1114,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Botón para generar PDF
     document.getElementById('generatePdfBtn')?.addEventListener('click', generatePDF);
+    
+    // Botón para exportar todas las evaluaciones a CSV
+    document.getElementById('exportAllBtn')?.addEventListener('click', saveEvaluationsToLocalCSV);
     
     // Configuración inicial
     showContent('evaluationContent');

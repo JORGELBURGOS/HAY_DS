@@ -14,52 +14,14 @@ const evaluationData = {
         communication: {
             1: 0,
             2: 1,
-            3: 2,
-            4: 3,
-            5: 4,
-            6: 5,
-            7: 6
+            3: 2
         },
         integration: {
             1: 0,
             2: 1,
             3: 2,
             4: 3,
-            5: 4,
-            6: 5,
-            7: 6,
-            8: 7
-        },
-        descriptions: {
-            technical: {
-                A: "BÁSICO: Nociones aritméticas, lectura y escritura elemental. Conocimiento de instrucciones y rutinas simples adquirido a través de breves explicaciones.",
-                B: "INTRODUCTORIO: Conocimiento de rutinas de trabajo y métodos estandarizados; conocimiento de datos e información general; manejo de equipos y maquinaria sencilla. El conocimiento se adquiere generalmente por medio de entrenamiento práctico en el trabajo.",
-                C: "GENERAL/PROCESO/PROCEDIMIENTO: Conocimientos para la aplicación de métodos y técnicas practicas; procedimientos y procesos de trabajo; habilidad para la operación con materiales, equipos y herramientas especializadas. El conocimiento generalmente se adquiere a través de formación especializada.",
-                D: "AVANZADO: Conocimiento amplio y especializado de métodos, técnicas y procesos con conocimiento limitado de las teorías en las que se basa. Este conocimiento generalmente se adquiere a través de formación especializada o larga experiencia práctica en el trabajo.",
-                E: "ESPECIALIZADO: Conocimiento contrastado en un campo técnico, científico o especializado basado en la comprensión de teorías y conceptos teóricos, así como en su contexto. Este conocimiento se adquiere normalmente a través de formación profesional o académica o de una amplia experiencia práctica.",
-                F: "ESPECIALIZACIÓN MADURA: Conocimiento amplio y profundo de un campo de expertise, que requiere el dominio de diversas prácticas y precedentes, así como de conceptos complejos y principios. Este conocimiento se adquiere a través de una muy profunda y amplia experiencia generalmente reforzada con una formación académica/profesional adicional.",
-                G: "ESPECIALIZACIÓN AMPLIA: Conocimiento y autoridad reconocidas en conceptos, principios y prácticas, adquiridos a través de una amplia experiencia en el negocio o de un gran desarrollo en un campo de especialización complejo.",
-                H: "REFERENTE: El puesto requiere competencia excepcional y liderazgo en una disciplina científica, con conocimiento y dominio de los principios y teorías y su aplicación. Este nivel podría asociarse con trabajos innovadores."
-            },
-            communication: {
-                1: "1. Comunica: El trato con otros implica principalmente la solicitud y el aporte de información. Se requiere amabilidad, tacto y efectividad.",
-                2: "2. Razonamiento: La interacción con otros requiere comprenderles, influirles y darles servicio, aplicando el conocimiento técnico o argumentos racionales que buscan conseguir acciones o la aceptación por su parte.",
-                3: "3. Cambio de comportamientos: La interacción con otros implica principalmente influir, desarrollar y motivar personas y generar comportamientos. A menudo implica liderazgo y la creación de un adecuado clima de trabajo.",
-                4: "4. Inspiración: Motiva y transforma a otros a través de la comunicación.",
-                5: "5. Comunicación Estratégica: Influencia externa a través de la comunicación.",
-                6: "6. Comunicación Institucional: Construcción de cultura organizacional a través de la comunicación.",
-                7: "7. Voz Pública: Representa a la organización como vocero público."
-            },
-            integration: {
-                1: "T. Focalizado en tareas específicas: Ejecución de una o varias tareas específicas en cuanto a objetivo y contenido con conocimiento limitado del contexto.",
-                2: "I. Específica: Ejecución o supervisión de diversas actividades específicas en cuanto a objetivo y contenido. Necesidad de interacción con otros trabajadores y conocimiento de las actividades relacionadas.",
-                3: "II. Homogénea: Integración de operaciones y servicios relacionados en cuanto a su naturaleza y objetivo. Se requiere coordinación con funciones relacionadas.",
-                4: "III. Heterogénea: Integración operativa o conceptual de funciones heterogéneas en naturaleza y objetivo o críticas para la consecución de los objetivos globales de negocio.",
-                5: "IV. Amplia: Integración estratégica y liderazgo de operaciones de negocio importantes o dirección de una función estratégica transversal en la compañía.",
-                6: "V. Ecosistemas: Integración interinstitucional y coordinación con múltiples organizaciones.",
-                7: "VI. Redes Abiertas: Integración multisectorial y coordinación compleja entre diferentes sectores.",
-                8: "VII. Visión Global: Integración internacional y coordinación a nivel global."
-            }
+            5: 4
         }
     },
     
@@ -80,25 +42,6 @@ const evaluationData = {
             F: 5,
             G: 6,
             H: 7
-        },
-        descriptions: {
-            complexity: {
-                1: "1. Repetitivo: Situaciones idénticas cuya solución requiere una simple elección entre cosas aprendidas.",
-                2: "2. Con modelos: Situaciones similares cuya solución requiere una elección crítica entre alternativas conocidas.",
-                3: "3. Variable: Situaciones diferentes que requieren la identificación de patrones, la aplicación de juicios y la selección de una solución dentro del área de conocimiento profesional y del conocimiento adquirido.",
-                4: "4. Adaptación: Las situaciones requieren constantemente de la adaptación o del desarrollo de nuevas soluciones a través de un pensamiento analítico, de la evaluación, la interpretación la creatividad y la innovación.",
-                5: "5. Sin precedentes: Situaciones novedosas e inexploradas que requieren el desarrollo de nuevos conceptos y de soluciones imaginativas para las que no existen precedentes."
-            },
-            thinkingFreedom: {
-                A: "A. RUTINA ESTRICTA: Actuación dentro de unas instrucciones muy detalladas y precisas. Existencia de un supervisor permanente.",
-                B: "B. RUTINA: Actuación dentro de prácticas e instrucciones detalladas y estandarizadas. Soporte y ejemplos disponibles de manera inmediata.",
-                C: "C. SEMI-RUTINA: Actuación dentro de procedimientos pre-definidos, diversificados. Gran cantidad de precedentes cubren la mayoría de las situaciones. Soporte fácilmente disponible.",
-                D: "D. ESTANDARIZADO: Actuación dentro de procedimientos, estándares y precedentes múltiples y sustancialmente diferentes. Soporte en caso necesario.",
-                E: "E. DEFINICIÓN CLARA: Actuación dentro de políticas, principios y objetivos específicos claramente definidos.",
-                F: "F. DEFINICIÓN AMPLIA: Actuación dentro de políticas y objetivos definidos de manera amplia.",
-                G: "G. DEFINICIÓN GENÉRICA: Actuación dentro de políticas generales, principios y metas de la organización.",
-                H: "H. ABSTRACTO: Actuación dentro del marco de leyes generales científicas o de la naturaleza; de valores culturales, filosóficos o de negocio."
-            }
         }
     },
     
@@ -125,60 +68,28 @@ const evaluationData = {
             2: 2,
             3: 3,
             4: 4
-        },
-        descriptions: {
-            freedom: {
-                A: "A. CONTROL ESTRICTO: Opera según instrucciones directas y detalladas, con una supervisión estrecha y permanente.",
-                B: "B. CONTROL: Sujeto a instrucciones y rutinas establecidas de trabajo, bajo supervisión estrecha.",
-                C: "C. ESTANDARIZADO: Opera dentro de prácticas y procedimientos estandarizados, instrucciones generales de trabajo y supervisión sobre el avance del trabajo y los resultados.",
-                D: "D. REGULACIÓN GENERAL: Opera dentro de prácticas y procedimientos cubiertos por precedentes o por políticas definidas. Supervisión sobre los resultados.",
-                E: "E. DIRECCIÓN: Sujeto a prácticas amplias y procedimientos cubiertos por precedentes y políticas. Dirección sobre la gestión.",
-                F: "F. DIRECCIÓN GENERAL: Sujeto a dirección genérica y a objetivos y políticas amplias.",
-                G: "G. GUIA: Sujetos solamente a una guía general; a objetivos organizativos amplios y a orientaciones estratégicas.",
-                H: "H. GUÍA ESTRATÉGICA: Dado el tamaño de la organización y su complejidad, solamente se encuentran sujetos a orientaciones genéricas en función de las tendencias del negocio."
-            },
-            impactNature: {
-                R: "R. Repetitivo: Impacto rutinario y repetitivo en las operaciones.",
-                C: "C. Circunstancial: Impacto ocasional en situaciones específicas.",
-                S: "S. Servicio: Impacto directo en la calidad de los servicios prestados.",
-                P: "P. Primario: Impacto directo y significativo en los resultados principales del negocio."
-            },
-            magnitude: {
-                N: "N. No cuantificada: Impacto cualitativo que no se mide en términos cuantitativos.",
-                1: "1. Muy pequeño: Impacto en un área muy limitada de la organización.",
-                2: "2. Pequeño: Impacto en un área específica pero más amplia que el nivel 1.",
-                3: "3. Medio: Impacto a nivel de departamento o unidad funcional.",
-                4: "4. Grande: Impacto en toda la organización o en resultados estratégicos."
-            }
         }
     },
     
     jobLevels: [
-        { min: 0, max: 100, level: "Nivel 1", description: "Descripción del nivel 1." },
-        { min: 101, max: 200, level: "Nivel 2", description: "Descripción del nivel 2." },
-        { min: 201, max: 300, level: "Nivel 3", description: "Descripción del nivel 3." },
-        { min: 301, max: 400, level: "Nivel 4", description: "Descripción del nivel 4." },
-        { min: 401, max: 500, level: "Nivel 5", description: "Descripción del nivel 5." },
-        { min: 501, max: 600, level: "Nivel 6", description: "Descripción del nivel 6." },
-        { min: 601, max: 700, level: "Nivel 7", description: "Descripción del nivel 7." },
-        { min: 701, max: 800, level: "Nivel 8", description: "Descripción del nivel 8." },
-        { min: 801, max: 900, level: "Nivel 9", description: "Descripción del nivel 9." },
-        { min: 901, max: 1000, level: "Nivel 10", description: "Descripción del nivel 10." },
-        { min: 1001, max: 1100, level: "Nivel 11", description: "Descripción del nivel 11." },
-        { min: 1101, max: 1200, level: "Nivel 12", description: "Descripción del nivel 12." },
-        { min: 1201, max: 1300, level: "Nivel 13", description: "Descripción del nivel 13." },
-        { min: 1301, max: 1400, level: "Nivel 14", description: "Descripción del nivel 14." },
-        { min: 1401, max: 1500, level: "Nivel 15", description: "Descripción del nivel 15." },
-        { min: 1501, max: 1600, level: "Nivel 16", description: "Descripción del nivel 16." },
-        { min: 1601, max: 1700, level: "Nivel 17", description: "Descripción del nivel 17." },
-        { min: 1701, max: 1800, level: "Nivel 18", description: "Descripción del nivel 18." },
-        { min: 1801, max: 1900, level: "Nivel 19", description: "Descripción del nivel 19." },
-        { min: 1901, max: 2000, level: "Nivel 20", description: "Descripción del nivel 20." },
-        { min: 2001, max: 2100, level: "Nivel 21", description: "Descripción del nivel 21." },
-        { min: 2101, max: 2200, level: "Nivel 22", description: "Descripción del nivel 22." },
-        { min: 2201, max: 2300, level: "Nivel 23", description: "Descripción del nivel 23." },
-        { min: 2301, max: 2400, level: "Nivel 24", description: "Descripción del nivel 24." },
-        { min: 2401, max: 2500, level: "Nivel 25", description: "Descripción del nivel 25." }
+        { min: 0, max: 50, level: "Nivel 8 - Operativo Básico", description: "Puestos operativos con tareas rutinarias y supervisión directa constante." },
+        { min: 51, max: 75, level: "Nivel 9 - Operativo Avanzado", description: "Puestos operativos con cierta autonomía en tareas repetitivas." },
+        { min: 76, max: 100, level: "Nivel 10 - Técnico Básico", description: "Puestos técnicos iniciales que requieren conocimientos específicos básicos." },
+        { min: 101, max: 125, level: "Nivel 11 - Técnico Intermedio", description: "Puestos técnicos con mayor autonomía y conocimientos especializados." },
+        { min: 126, max: 150, level: "Nivel 12 - Técnico Avanzado", description: "Puestos técnicos especializados con capacidad para resolver problemas técnicos." },
+        { min: 151, max: 175, level: "Nivel 13 - Profesional Junior", description: "Puestos profesionales iniciales con conocimientos avanzados en su área." },
+        { min: 176, max: 200, level: "Nivel 14 - Profesional", description: "Puestos profesionales con capacidad para resolver problemas complejos." },
+        { min: 201, max: 250, level: "Nivel 15 - Profesional Senior", description: "Puestos profesionales con experiencia y capacidad para supervisar a otros." },
+        { min: 251, max: 300, level: "Nivel 16 - Coordinador", description: "Coordinación de áreas o equipos pequeños con responsabilidad operativa." },
+        { min: 301, max: 375, level: "Nivel 17 - Supervisor", description: "Supervisión directa de equipos y procesos con responsabilidad sobre resultados." },
+        { min: 376, max: 450, level: "Nivel 18 - Jefe de Departamento", description: "Responsabilidad sobre un departamento funcional con personal a cargo." },
+        { min: 451, max: 550, level: "Nivel 19 - Subgerente", description: "Asistencia en la gerencia de áreas funcionales importantes." },
+        { min: 551, max: 675, level: "Nivel 20 - Gerente", description: "Responsabilidad completa sobre un área funcional importante." },
+        { min: 676, max: 800, level: "Nivel 21 - Gerente Senior", description: "Gerencia de áreas críticas con impacto significativo en la organización." },
+        { min: 801, max: 950, level: "Nivel 22 - Director", description: "Dirección de áreas estratégicas con responsabilidad sobre múltiples funciones." },
+        { min: 951, max: 1100, level: "Nivel 23 - Director Senior", description: "Dirección estratégica con impacto en toda la organización." },
+        { min: 1101, max: 1300, level: "Nivel 24 - Vicepresidente", description: "Liderazgo ejecutivo con responsabilidad sobre divisiones completas." },
+        { min: 1301, max: 1600, level: "Nivel 25 - Alta Dirección", description: "Máximo nivel ejecutivo con responsabilidad total sobre la organización." }
     ],
     
     profileTypes: {
@@ -199,12 +110,6 @@ window.currentEvaluation = null;
 window.evaluationCharts = {
     levelDistribution: null,
     scoreDistribution: null
-};
-window.userSelections = {
-    description: {},
-    knowHow: {},
-    problemSolving: {},
-    responsibility: {}
 };
 
 // Función para mostrar notificaciones
@@ -239,16 +144,7 @@ function goToSection(sectionId) {
         step.classList.remove('active');
     });
     
-    // Mapeo de números de paso a IDs de sección
-    const sectionMap = {
-        '1': '1-section',
-        '2': '2-section',
-        '3': '3-section',
-        '4': '4-section',
-        '5': '5-section'
-    };
-    
-    const section = document.getElementById(sectionMap[sectionId] || document.getElementById(sectionId));
+    const section = document.getElementById(sectionId);
     if (section) {
         section.classList.add('active');
     }
@@ -377,7 +273,7 @@ function viewEvaluation(id) {
     }
     
     showContent('evaluationContent');
-    goToSection('5-section'); // Cambiado a '5-section' para coincidir con el HTML
+    goToSection('results-section');
     
     document.getElementById('totalScore').textContent = evaluation.scores.total;
     document.getElementById('jobLevel').textContent = evaluation.level.level;
@@ -452,7 +348,9 @@ function createLevelDistributionChart(levelCounts) {
     const data = Object.values(levelCounts);
     const backgroundColors = [
         '#4361ee', '#3f37c9', '#4cc9f0', '#4895ef', '#560bad',
-        '#b5179e', '#f72585'
+        '#b5179e', '#f72585', '#4caf50', '#ff9800', '#607d8b',
+        '#9c27b0', '#2196f3', '#00bcd4', '#009688', '#8bc34a',
+        '#cddc39', '#ffc107', '#ff5722', '#795548', '#9e9e9e'
     ];
     
     window.evaluationCharts.levelDistribution = new Chart(ctx, {
@@ -492,7 +390,8 @@ function createScoreDistributionChart(scores) {
     }
     
     const ranges = [
-        '0-200', '201-400', '401-600', '601-800', '801-1000', '1001-1200', '1201-1400'
+        '0-200', '201-400', '401-600', '601-800', '801-1000', 
+        '1001-1200', '1201-1400', '1401-1600'
     ];
     
     const counts = ranges.map(range => {
@@ -553,22 +452,6 @@ function calculateKnowHowScore() {
         return null;
     }
     
-    // Guardar selecciones del usuario
-    window.userSelections.knowHow = {
-        technical: {
-            level: technicalLevel,
-            description: evaluationData.knowHow.descriptions.technical[technicalLevel]
-        },
-        communication: {
-            level: communicationLevel,
-            description: evaluationData.knowHow.descriptions.communication[communicationLevel]
-        },
-        integration: {
-            level: integrationScope,
-            description: evaluationData.knowHow.descriptions.integration[integrationScope]
-        }
-    };
-    
     const commIndex = evaluationData.knowHow.communication[communicationLevel];
     const intIndex = evaluationData.knowHow.integration[integrationScope];
     const techScores = evaluationData.knowHow.technical[technicalLevel];
@@ -589,18 +472,6 @@ function calculateProblemSolvingScore(knowHowScore) {
         return null;
     }
     
-    // Guardar selecciones del usuario
-    window.userSelections.problemSolving = {
-        complexity: {
-            level: complexityLevel,
-            description: evaluationData.problemSolving.descriptions.complexity[complexityLevel]
-        },
-        thinkingFreedom: {
-            level: thinkingFreedom,
-            description: evaluationData.problemSolving.descriptions.thinkingFreedom[thinkingFreedom]
-        }
-    };
-    
     const complexityFactors = evaluationData.problemSolving.complexity[complexityLevel];
     const freedomIndex = evaluationData.problemSolving.thinkingFreedom[thinkingFreedom];
     const adjustedIndex = Math.min(freedomIndex, complexityFactors.length - 1);
@@ -619,22 +490,6 @@ function calculateResponsibilityScore() {
         showNotification('Por favor complete todos los campos de Responsabilidad', 'error');
         return null;
     }
-    
-    // Guardar selecciones del usuario
-    window.userSelections.responsibility = {
-        freedom: {
-            level: freedomLevel,
-            description: evaluationData.responsibility.descriptions.freedom[freedomLevel]
-        },
-        impactNature: {
-            level: impactNature,
-            description: evaluationData.responsibility.descriptions.impactNature[impactNature]
-        },
-        magnitude: {
-            level: magnitude,
-            description: evaluationData.responsibility.descriptions.magnitude[magnitude]
-        }
-    };
     
     const freedomScores = evaluationData.responsibility.freedom[freedomLevel];
     const natureIndex = evaluationData.responsibility.impactNature[impactNature];
@@ -665,7 +520,7 @@ function animateProgressCircle(score) {
     if (circle) {
         const radius = circle.r.baseVal.value;
         const circumference = 2 * Math.PI * radius;
-        const offset = circumference - (score / 1400) * circumference;
+        const offset = circumference - (score / 1600) * circumference;
         
         circle.style.strokeDasharray = `${circumference} ${circumference}`;
         circle.style.strokeDashoffset = circumference;
@@ -700,7 +555,7 @@ function animateProgressBars(scores) {
     const bars = [
         { id: 'knowhow-bar', value: scores.knowHow / 1056 * 100 },
         { id: 'problemsolving-bar', value: scores.problemSolving / 1056 * 100 },
-        { id: 'responsibility-bar', value: scores.responsibility / 1400 * 100 }
+        { id: 'responsibility-bar', value: scores.responsibility / 1600 * 100 }
     ];
     
     bars.forEach((bar, index) => {
@@ -792,8 +647,7 @@ function saveEvaluationToLocal(data) {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             profileType: profileType,
-            profileName: profileInfo.name,
-            userSelections: window.userSelections
+            profileName: profileInfo.name
         };
         
         evaluations.push(evaluationWithMeta);
@@ -874,7 +728,7 @@ function exportEvaluation(data, format = 'json') {
     }
 }
 
-// Función para generar PDF con todas las selecciones del usuario
+// Función para generar PDF
 function generatePDF() {
     if (!window.currentEvaluation) {
         showNotification('No hay evaluación para generar PDF', 'error');
@@ -887,7 +741,6 @@ function generatePDF() {
     const profileType = determineProfileType(window.currentEvaluation.scores.knowHow, window.currentEvaluation.scores.problemSolving);
     const profileInfo = evaluationData.profileTypes[profileType];
     
-    // Configuración inicial
     doc.setFontSize(20);
     doc.setTextColor(67, 97, 238);
     doc.text('Evaluación de Puesto', 105, 20, { align: 'center' });
@@ -897,64 +750,28 @@ function generatePDF() {
     doc.text(`Puesto: ${window.currentEvaluation.jobTitle}`, 20, 40);
     doc.text(`Fecha de evaluación: ${new Date(window.currentEvaluation.evaluationDate).toLocaleDateString()}`, 20, 50);
     
-    // Sección de Descripción del Puesto
     doc.setFontSize(14);
     doc.setTextColor(67, 97, 238);
     doc.text('Descripción del Puesto:', 20, 70);
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
-    
     const descriptionLines = doc.splitTextToSize(window.currentEvaluation.jobDescription || 'No especificado', 170);
     doc.text(descriptionLines, 20, 80);
     
-    doc.text('Responsabilidades Principales:', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 20 : 100);
+    doc.setFontSize(14);
+    doc.setTextColor(67, 97, 238);
+    doc.text('Responsabilidades Principales:', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 20 : 110);
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
     const responsibilitiesLines = doc.splitTextToSize(window.currentEvaluation.jobResponsibilities || 'No especificado', 170);
-    doc.text(responsibilitiesLines, 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 30 : 110);
+    doc.text(responsibilitiesLines, 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 30 : 120);
     
-    // Sección de Detalles de Evaluación
     doc.setFontSize(16);
     doc.setTextColor(67, 97, 238);
-    doc.text('Detalles de la Evaluación', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 50 : 140);
-    
-    // Know-How
-    doc.setFontSize(14);
-    doc.text('Know-How:', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 70 : 160);
-    doc.setFontSize(12);
-    
-    if (window.userSelections.knowHow) {
-        doc.text(`Competencia Técnica: ${window.userSelections.knowHow.technical.level} - ${window.userSelections.knowHow.technical.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 80 : 170);
-        doc.text(`Nivel de Comunicación: ${window.userSelections.knowHow.communication.level} - ${window.userSelections.knowHow.communication.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 90 : 180);
-        doc.text(`Ámbito de Integración: ${window.userSelections.knowHow.integration.level} - ${window.userSelections.knowHow.integration.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 100 : 190);
-    }
-    
-    // Solución de Problemas
-    doc.setFontSize(14);
-    doc.text('Solución de Problemas:', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 120 : 210);
-    doc.setFontSize(12);
-    
-    if (window.userSelections.problemSolving) {
-        doc.text(`Complejidad de las Situaciones: ${window.userSelections.problemSolving.complexity.level} - ${window.userSelections.problemSolving.complexity.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 130 : 220);
-        doc.text(`Marco de Referencia - Libertad de Pensar: ${window.userSelections.problemSolving.thinkingFreedom.level} - ${window.userSelections.problemSolving.thinkingFreedom.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 140 : 230);
-    }
-    
-    // Responsabilidad
-    doc.setFontSize(14);
-    doc.text('Responsabilidad:', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 160 : 250);
-    doc.setFontSize(12);
-    
-    if (window.userSelections.responsibility) {
-        doc.text(`Libertad para Actuar: ${window.userSelections.responsibility.freedom.level} - ${window.userSelections.responsibility.freedom.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 170 : 260);
-        doc.text(`Naturaleza del Impacto: ${window.userSelections.responsibility.impactNature.level} - ${window.userSelections.responsibility.impactNature.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 180 : 270);
-        doc.text(`Magnitud (Área de Influencia): ${window.userSelections.responsibility.magnitude.level} - ${window.userSelections.responsibility.magnitude.description}`, 25, doc.previousAutoTable ? doc.previousAutoTable.finalY + 190 : 280);
-    }
-    
-    // Resultados de Evaluación
-    doc.setFontSize(16);
-    doc.setTextColor(67, 97, 238);
-    doc.text('Resultados de Evaluación', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 210 : 300);
+    doc.text('Resultados de Evaluación', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 50 : 150);
     
     doc.autoTable({
-        startY: doc.previousAutoTable ? doc.previousAutoTable.finalY + 220 : 310,
+        startY: doc.previousAutoTable ? doc.previousAutoTable.finalY + 60 : 160,
         head: [['Componente', 'Puntaje']],
         body: [
             ['Know-How', window.currentEvaluation.scores.knowHow],
@@ -1068,13 +885,6 @@ function evaluateJob() {
         return;
     }
 
-    // Guardar descripción del puesto
-    window.userSelections.description = {
-        jobTitle: jobTitle,
-        jobDescription: document.getElementById('jobDescription').value,
-        jobResponsibilities: document.getElementById('jobResponsibilities').value
-    };
-
     // Calcular puntajes
     const knowHowScore = calculateKnowHowScore();
     if (knowHowScore === null) return;
@@ -1090,12 +900,13 @@ function evaluateJob() {
     const profileType = determineProfileType(knowHowScore, problemSolvingScore);
     const profileInfo = evaluationData.profileTypes[profileType];
 
-    // Mostrar resultados
+    // Mostrar resultados (PERFIL CORTO VISIBLE)
     document.getElementById('totalScore').textContent = totalScore;
     document.getElementById('jobLevel').textContent = jobLevel.level;
     document.getElementById('levelDescription').textContent = jobLevel.description;
     document.getElementById('jobDescriptionResult').textContent = jobTitle;
     
+    // PERFIL CORTO - Sección nueva
     document.getElementById('profileType').textContent = profileInfo.name;
     document.getElementById('profileDescription').textContent = profileInfo.description;
     document.getElementById('knowHowScore').textContent = `${knowHowScore} pts`;
@@ -1125,23 +936,16 @@ function evaluateJob() {
         },
         level: jobLevel,
         profileType: profileType,
-        profileName: profileInfo.name,
-        userSelections: window.userSelections
+        profileName: profileInfo.name
     };
 
     // Ir a resultados
-    goToSection('5-section');
+    goToSection('results-section');
 }
 
 // Función para resetear la evaluación
 function resetEvaluation() {
     window.currentEvaluation = null;
-    window.userSelections = {
-        description: {},
-        knowHow: {},
-        problemSolving: {},
-        responsibility: {}
-    };
     
     document.getElementById('jobTitle').value = '';
     document.getElementById('jobDescription').value = '';
@@ -1173,7 +977,7 @@ function resetEvaluation() {
         circle.style.strokeDashoffset = circumference;
     }
     
-    goToSection('1-section');
+    goToSection('description-section');
 }
 
 // Añadir CSS para el diálogo de guardado
@@ -1279,50 +1083,19 @@ document.addEventListener('DOMContentLoaded', function() {
         showContent('settingsContent');
     });
     
-    // Navegación por pasos
     document.querySelectorAll('.step').forEach(step => {
         step.addEventListener('click', function() {
             const stepNumber = this.getAttribute('data-step');
-            const sectionId = `${stepNumber}-section`;
-            
-            // Validar si podemos navegar a esa sección
-            if (stepNumber === '1' || 
-                (stepNumber === '2' && document.getElementById('jobTitle').value) ||
-                (stepNumber === '3' && document.getElementById('technicalCompetence').value) ||
-                (stepNumber === '4' && document.getElementById('problemComplexity').value) ||
-                (stepNumber === '5' && window.currentEvaluation)) {
-                goToSection(sectionId);
-            } else {
-                showNotification('Complete los pasos anteriores primero', 'warning');
-            }
+            goToSection(`${stepNumber}-section`);
         });
     });
     
-    document.getElementById('nextToKnowHow')?.addEventListener('click', () => {
-        if (document.getElementById('jobTitle').value) {
-            goToSection('2-section');
-        } else {
-            showNotification('Por favor ingrese el nombre del puesto', 'error');
-        }
-    });
-    
-    document.getElementById('backToDescription')?.addEventListener('click', () => goToSection('1-section'));
-    document.getElementById('nextToProblemSolving')?.addEventListener('click', () => {
-        if (document.getElementById('technicalCompetence').value) {
-            goToSection('3-section');
-        } else {
-            showNotification('Por favor complete los campos de Know-How', 'error');
-        }
-    });
-    document.getElementById('backToKnowHow')?.addEventListener('click', () => goToSection('2-section'));
-    document.getElementById('nextToResponsibility')?.addEventListener('click', () => {
-        if (document.getElementById('problemComplexity').value) {
-            goToSection('4-section');
-        } else {
-            showNotification('Por favor complete los campos de Solución de Problemas', 'error');
-        }
-    });
-    document.getElementById('backToProblemSolving')?.addEventListener('click', () => goToSection('3-section'));
+    document.getElementById('nextToKnowHow')?.addEventListener('click', () => goToSection('knowhow-section'));
+    document.getElementById('backToDescription')?.addEventListener('click', () => goToSection('description-section'));
+    document.getElementById('nextToProblemSolving')?.addEventListener('click', () => goToSection('problem-solving-section'));
+    document.getElementById('backToKnowHow')?.addEventListener('click', () => goToSection('knowhow-section'));
+    document.getElementById('nextToResponsibility')?.addEventListener('click', () => goToSection('responsibility-section'));
+    document.getElementById('backToProblemSolving')?.addEventListener('click', () => goToSection('problem-solving-section'));
     
     document.getElementById('evaluateBtn')?.addEventListener('click', function(e) {
         e.preventDefault();
@@ -1351,40 +1124,5 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('exportAllBtn')?.addEventListener('click', saveEvaluationsToLocalCSV);
     
     showContent('evaluationContent');
-    goToSection('1-section');
-});
-
-
-// Función para cambiar de sección del formulario (1 a 5)
-function goToSection(step) {
-    document.querySelectorAll('.form-section').forEach(section => {
-        section.classList.remove('active');
-    });
-    document.querySelectorAll('.step').forEach(stepEl => {
-        stepEl.classList.remove('active');
-    });
-
-    const section = document.getElementById(`${step}-section`);
-    if (section) {
-        section.classList.add('active');
-    }
-
-    const stepElement = document.querySelector(`.step[data-step="${step}"]`);
-    if (stepElement) {
-        stepElement.classList.add('active');
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Configurar navegación por botones
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("nextToKnowHow")?.addEventListener("click", () => goToSection(2));
-    document.getElementById("backToDescription")?.addEventListener("click", () => goToSection(1));
-    document.getElementById("nextToProblemSolving")?.addEventListener("click", () => goToSection(3));
-    document.getElementById("backToKnowHow")?.addEventListener("click", () => goToSection(2));
-    document.getElementById("nextToResponsibility")?.addEventListener("click", () => goToSection(4));
-    document.getElementById("backToProblemSolving")?.addEventListener("click", () => goToSection(3));
-    document.getElementById("nextToResults")?.addEventListener("click", () => goToSection(5));
-    document.getElementById("backToResponsibility")?.addEventListener("click", () => goToSection(4));
+    goToSection('description-section');
 });

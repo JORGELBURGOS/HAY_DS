@@ -14,21 +14,14 @@ const evaluationData = {
         communication: {
             1: 0,
             2: 1,
-            3: 2,
-            4: 3,
-            5: 4,
-            6: 5,
-            7: 6
+            3: 2
         },
         integration: {
             1: 0,
             2: 1,
             3: 2,
             4: 3,
-            5: 4,
-            6: 5,
-            7: 6,
-            8: 7
+            5: 4
         }
     },
     
@@ -79,158 +72,27 @@ const evaluationData = {
     },
     
     jobLevels: [
-{
-        min: 0,
-        max: 100,
-        level: "Nivel 1",
-        description: "Descripción del nivel 1."
-    },
-{
-        min: 101,
-        max: 200,
-        level: "Nivel 2",
-        description: "Descripción del nivel 2."
-    },
-{
-        min: 201,
-        max: 300,
-        level: "Nivel 3",
-        description: "Descripción del nivel 3."
-    },
-{
-        min: 301,
-        max: 400,
-        level: "Nivel 4",
-        description: "Descripción del nivel 4."
-    },
-{
-        min: 401,
-        max: 500,
-        level: "Nivel 5",
-        description: "Descripción del nivel 5."
-    },
-{
-        min: 501,
-        max: 600,
-        level: "Nivel 6",
-        description: "Descripción del nivel 6."
-    },
-{
-        min: 601,
-        max: 700,
-        level: "Nivel 7",
-        description: "Descripción del nivel 7."
-    },
-{
-        min: 701,
-        max: 800,
-        level: "Nivel 8",
-        description: "Descripción del nivel 8."
-    },
-{
-        min: 801,
-        max: 900,
-        level: "Nivel 9",
-        description: "Descripción del nivel 9."
-    },
-{
-        min: 901,
-        max: 1000,
-        level: "Nivel 10",
-        description: "Descripción del nivel 10."
-    },
-{
-        min: 1001,
-        max: 1100,
-        level: "Nivel 11",
-        description: "Descripción del nivel 11."
-    },
-{
-        min: 1101,
-        max: 1200,
-        level: "Nivel 12",
-        description: "Descripción del nivel 12."
-    },
-{
-        min: 1201,
-        max: 1300,
-        level: "Nivel 13",
-        description: "Descripción del nivel 13."
-    },
-{
-        min: 1301,
-        max: 1400,
-        level: "Nivel 14",
-        description: "Descripción del nivel 14."
-    },
-{
-        min: 1401,
-        max: 1500,
-        level: "Nivel 15",
-        description: "Descripción del nivel 15."
-    },
-{
-        min: 1501,
-        max: 1600,
-        level: "Nivel 16",
-        description: "Descripción del nivel 16."
-    },
-{
-        min: 1601,
-        max: 1700,
-        level: "Nivel 17",
-        description: "Descripción del nivel 17."
-    },
-{
-        min: 1701,
-        max: 1800,
-        level: "Nivel 18",
-        description: "Descripción del nivel 18."
-    },
-{
-        min: 1801,
-        max: 1900,
-        level: "Nivel 19",
-        description: "Descripción del nivel 19."
-    },
-{
-        min: 1901,
-        max: 2000,
-        level: "Nivel 20",
-        description: "Descripción del nivel 20."
-    },
-{
-        min: 2001,
-        max: 2100,
-        level: "Nivel 21",
-        description: "Descripción del nivel 21."
-    },
-{
-        min: 2101,
-        max: 2200,
-        level: "Nivel 22",
-        description: "Descripción del nivel 22."
-    },
-{
-        min: 2201,
-        max: 2300,
-        level: "Nivel 23",
-        description: "Descripción del nivel 23."
-    },
-{
-        min: 2301,
-        max: 2400,
-        level: "Nivel 24",
-        description: "Descripción del nivel 24."
-    },
-{
-        min: 2401,
-        max: 2500,
-        level: "Nivel 25",
-        description: "Descripción del nivel 25."
-    }
-],
-        profileTypes: {
+        { min: 0, max: 50, level: "Nivel 8 - Operativo Básico", description: "Puestos operativos con tareas rutinarias y supervisión directa constante." },
+        { min: 51, max: 75, level: "Nivel 9 - Operativo Avanzado", description: "Puestos operativos con cierta autonomía en tareas repetitivas." },
+        { min: 76, max: 100, level: "Nivel 10 - Técnico Básico", description: "Puestos técnicos iniciales que requieren conocimientos específicos básicos." },
+        { min: 101, max: 125, level: "Nivel 11 - Técnico Intermedio", description: "Puestos técnicos con mayor autonomía y conocimientos especializados." },
+        { min: 126, max: 150, level: "Nivel 12 - Técnico Avanzado", description: "Puestos técnicos especializados con capacidad para resolver problemas técnicos." },
+        { min: 151, max: 175, level: "Nivel 13 - Profesional Junior", description: "Puestos profesionales iniciales con conocimientos avanzados en su área." },
+        { min: 176, max: 200, level: "Nivel 14 - Profesional", description: "Puestos profesionales con capacidad para resolver problemas complejos." },
+        { min: 201, max: 250, level: "Nivel 15 - Profesional Senior", description: "Puestos profesionales con experiencia y capacidad para supervisar a otros." },
+        { min: 251, max: 300, level: "Nivel 16 - Coordinador", description: "Coordinación de áreas o equipos pequeños con responsabilidad operativa." },
+        { min: 301, max: 375, level: "Nivel 17 - Supervisor", description: "Supervisión directa de equipos y procesos con responsabilidad sobre resultados." },
+        { min: 376, max: 450, level: "Nivel 18 - Jefe de Departamento", description: "Responsabilidad sobre un departamento funcional con personal a cargo." },
+        { min: 451, max: 550, level: "Nivel 19 - Subgerente", description: "Asistencia en la gerencia de áreas funcionales importantes." },
+        { min: 551, max: 675, level: "Nivel 20 - Gerente", description: "Responsabilidad completa sobre un área funcional importante." },
+        { min: 676, max: 800, level: "Nivel 21 - Gerente Senior", description: "Gerencia de áreas críticas con impacto significativo en la organización." },
+        { min: 801, max: 950, level: "Nivel 22 - Director", description: "Dirección de áreas estratégicas con responsabilidad sobre múltiples funciones." },
+        { min: 951, max: 1100, level: "Nivel 23 - Director Senior", description: "Dirección estratégica con impacto en toda la organización." },
+        { min: 1101, max: 1300, level: "Nivel 24 - Vicepresidente", description: "Liderazgo ejecutivo con responsabilidad sobre divisiones completas." },
+        { min: 1301, max: 1600, level: "Nivel 25 - Alta Dirección", description: "Máximo nivel ejecutivo con responsabilidad total sobre la organización." }
+    ],
+    
+    profileTypes: {
         "P4": { name: "Perfil Corto P4", description: "Puntos PS > Puntos AC (Ratio > 0.87)" },
         "P3": { name: "Perfil Corto P3", description: "Puntos PS > Puntos AC (Ratio > 0.76)" },
         "P2": { name: "Perfil Corto P2", description: "Puntos PS > Puntos AC (Ratio > 0.66)" },
@@ -486,7 +348,9 @@ function createLevelDistributionChart(levelCounts) {
     const data = Object.values(levelCounts);
     const backgroundColors = [
         '#4361ee', '#3f37c9', '#4cc9f0', '#4895ef', '#560bad',
-        '#b5179e', '#f72585'
+        '#b5179e', '#f72585', '#4caf50', '#ff9800', '#607d8b',
+        '#9c27b0', '#2196f3', '#00bcd4', '#009688', '#8bc34a',
+        '#cddc39', '#ffc107', '#ff5722', '#795548', '#9e9e9e'
     ];
     
     window.evaluationCharts.levelDistribution = new Chart(ctx, {
@@ -526,7 +390,8 @@ function createScoreDistributionChart(scores) {
     }
     
     const ranges = [
-        '0-200', '201-400', '401-600', '601-800', '801-1000', '1001-1200', '1201-1400'
+        '0-200', '201-400', '401-600', '601-800', '801-1000', 
+        '1001-1200', '1201-1400', '1401-1600'
     ];
     
     const counts = ranges.map(range => {
@@ -655,7 +520,7 @@ function animateProgressCircle(score) {
     if (circle) {
         const radius = circle.r.baseVal.value;
         const circumference = 2 * Math.PI * radius;
-        const offset = circumference - (score / 1400) * circumference;
+        const offset = circumference - (score / 1600) * circumference;
         
         circle.style.strokeDasharray = `${circumference} ${circumference}`;
         circle.style.strokeDashoffset = circumference;
@@ -690,7 +555,7 @@ function animateProgressBars(scores) {
     const bars = [
         { id: 'knowhow-bar', value: scores.knowHow / 1056 * 100 },
         { id: 'problemsolving-bar', value: scores.problemSolving / 1056 * 100 },
-        { id: 'responsibility-bar', value: scores.responsibility / 1400 * 100 }
+        { id: 'responsibility-bar', value: scores.responsibility / 1600 * 100 }
     ];
     
     bars.forEach((bar, index) => {

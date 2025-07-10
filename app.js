@@ -114,7 +114,19 @@ const evaluationData = {
             level: "Nivel 7 - Alta Dirección", 
             description: "Puestos de alta dirección (CEO, Presidentes) con responsabilidad total sobre la organización. Toman decisiones que definen el rumbo estratégico y visión de la empresa."
         }
-    ]
+    ],
+    
+    profileTypes: {
+        "P4": { name: "Perfil Corto P4", description: "Puntos PS > Puntos AC (Ratio > 0.87)" },
+        "P3": { name: "Perfil Corto P3", description: "Puntos PS > Puntos AC (Ratio > 0.76)" },
+        "P2": { name: "Perfil Corto P2", description: "Puntos PS > Puntos AC (Ratio > 0.66)" },
+        "P1": { name: "Perfil Corto P1", description: "Puntos PS > Puntos AC (Ratio > 0.57)" },
+        "LEVEL": { name: "Perfil Balanceado", description: "Puntos AC = Puntos PS (Ratio entre 0.5 y 0.57)" },
+        "A1": { name: "Perfil Corto A1", description: "Puntos AC > Puntos PS (Ratio > 0.43)" },
+        "A2": { name: "Perfil Corto A2", description: "Puntos AC > Puntos PS (Ratio > 0.38)" },
+        "A3": { name: "Perfil Corto A3", description: "Puntos AC > Puntos PS (Ratio > 0.33)" },
+        "A4": { name: "Perfil Corto A4", description: "Puntos AC > Puntos PS (Ratio ≤ 0.33)" }
+    }
 };
 
 // Variables globales
@@ -175,29 +187,24 @@ function goToSection(sectionId) {
 
 // Función para cambiar entre contenidos principales
 function showContent(contentId) {
-    // Ocultar todos los contenidos
     document.querySelectorAll('#evaluationContent, #evaluationsContent, #reportsContent, #settingsContent').forEach(content => {
         content.classList.add('hidden-content');
     });
     
-    // Mostrar el contenido seleccionado
     const content = document.getElementById(contentId);
     if (content) {
         content.classList.remove('hidden-content');
     }
     
-    // Actualizar navegación activa
     document.querySelectorAll('.nav-links li').forEach(li => {
         li.classList.remove('active');
     });
     
-    // Marcar como activo el elemento correspondiente
     const activeLink = document.querySelector(`#${contentId.replace('Content', 'Link')}`);
     if (activeLink) {
         activeLink.parentElement.classList.add('active');
     }
     
-    // Cargar datos si es necesario
     if (contentId === 'evaluationsContent') {
         loadEvaluationsList();
     } else if (contentId === 'reportsContent') {
@@ -245,7 +252,6 @@ function loadEvaluationsList() {
             evaluationsList.appendChild(evaluationItem);
         });
         
-        // Agregar event listeners a los botones
         document.querySelectorAll('.view-evaluation').forEach(button => {
             button.addEventListener('click', function() {
                 const evaluationId = parseInt(this.getAttribute('data-id'));
@@ -290,21 +296,23 @@ function viewEvaluation(id) {
         return;
     }
     
-    // Mostrar la evaluación en la sección de resultados
     showContent('evaluationContent');
     goToSection('results-section');
     
-    // Mostrar resultados
     document.getElementById('totalScore').textContent = evaluation.scores.total;
     document.getElementById('jobLevel').textContent = evaluation.level.level;
     document.getElementById('levelDescription').textContent = evaluation.level.description;
     document.getElementById('jobDescriptionResult').textContent = evaluation.jobTitle;
     
-    // Actualizar animaciones
     animateProgressCircle(evaluation.scores.total);
     document.getElementById('knowHowScore').textContent = `${evaluation.scores.knowHow} pts`;
     document.getElementById('problemSolvingScore').textContent = `${evaluation.scores.problemSolving} pts`;
     document.getElementById('responsibilityScore').textContent = `${evaluation.scores.responsibility} pts`;
+    
+    const profileType = determineProfileType(evaluation.scores.knowHow, evaluation.scores.problemSolving);
+    const profileInfo = evaluationData.profileTypes[profileType];
+    document.getElementById('profileType').textContent = profileInfo.name;
+    document.getElementById('profileDescription').textContent = profileInfo.description;
     
     animateProgressBars({
         knowHow: evaluation.scores.knowHow,
@@ -312,8 +320,22 @@ function viewEvaluation(id) {
         responsibility: evaluation.scores.responsibility
     });
     
-    // Guardar en memoria para posible exportación/guardado
     window.currentEvaluation = evaluation;
+}
+
+// Función para determinar el Perfil Corto
+function determineProfileType(knowHowScore, problemSolvingScore) {
+    const ratio = problemSolvingScore / knowHowScore;
+    
+    if (ratio > 0.87) return "P4";
+    if (ratio > 0.76) return "P3";
+    if (ratio > 0.66) return "P2";
+    if (ratio > 0.57) return "P1";
+    if (ratio >= 0.5 && ratio <= 0.57) return "LEVEL";
+    if (ratio > 0.43) return "A1";
+    if (ratio > 0.38) return "A2";
+    if (ratio > 0.33) return "A3";
+    return "A4";
 }
 
 // Función para cargar reportes
@@ -325,7 +347,6 @@ function loadReports() {
         return;
     }
     
-    // Preparar datos para los gráficos
     const levelCounts = {};
     const scores = evaluations.map(e => e.scores.total);
     
@@ -335,7 +356,6 @@ function loadReports() {
         ).length;
     });
     
-    // Crear o actualizar gráficos
     createLevelDistributionChart(levelCounts);
     createScoreDistributionChart(scores);
 }
@@ -344,7 +364,6 @@ function loadReports() {
 function createLevelDistributionChart(levelCounts) {
     const ctx = document.getElementById('levelDistributionChart').getContext('2d');
     
-    // Destruir gráfico anterior si existe
     if (window.evaluationCharts.levelDistribution) {
         window.evaluationCharts.levelDistribution.destroy();
     }
@@ -388,12 +407,10 @@ function createLevelDistributionChart(levelCounts) {
 function createScoreDistributionChart(scores) {
     const ctx = document.getElementById('scoreDistributionChart').getContext('2d');
     
-    // Destruir gráfico anterior si existe
     if (window.evaluationCharts.scoreDistribution) {
         window.evaluationCharts.scoreDistribution.destroy();
     }
     
-    // Crear rangos de puntajes
     const ranges = [
         '0-200', '201-400', '401-600', '601-800', '801-1000', '1001-1200', '1201-1400'
     ];
@@ -576,22 +593,28 @@ function animateProgressBars(scores) {
 function saveEvaluationsToCSV(evaluations) {
     const headers = [
         'ID', 'Título del Puesto', 'Descripción', 'Responsabilidades', 
-        'Fecha de Evaluación', 'Puntaje Total', 'Nivel', 
+        'Fecha de Evaluación', 'Puntaje Total', 'Nivel', 'Perfil Corto',
         'Know-How', 'Solución de Problemas', 'Responsabilidad'
     ];
     
-    const rows = evaluations.map(evaluation => [
-        evaluation.id,
-        `"${evaluation.jobTitle.replace(/"/g, '""')}"`,
-        `"${(evaluation.jobDescription || '').replace(/"/g, '""')}"`,
-        `"${(evaluation.jobResponsibilities || '').replace(/"/g, '""')}"`,
-        new Date(evaluation.evaluationDate).toISOString(),
-        evaluation.scores.total,
-        `"${evaluation.level.level.replace(/"/g, '""')}"`,
-        evaluation.scores.knowHow,
-        evaluation.scores.problemSolving,
-        evaluation.scores.responsibility
-    ]);
+    const rows = evaluations.map(evaluation => {
+        const profileType = determineProfileType(evaluation.scores.knowHow, evaluation.scores.problemSolving);
+        const profileInfo = evaluationData.profileTypes[profileType];
+        
+        return [
+            evaluation.id,
+            `"${evaluation.jobTitle.replace(/"/g, '""')}"`,
+            `"${(evaluation.jobDescription || '').replace(/"/g, '""')}"`,
+            `"${(evaluation.jobResponsibilities || '').replace(/"/g, '""')}"`,
+            new Date(evaluation.evaluationDate).toISOString(),
+            evaluation.scores.total,
+            `"${evaluation.level.level.replace(/"/g, '""')}"`,
+            `"${profileInfo.name.replace(/"/g, '""')}"`,
+            evaluation.scores.knowHow,
+            evaluation.scores.problemSolving,
+            evaluation.scores.responsibility
+        ];
+    });
     
     const csvContent = [headers, ...rows]
         .map(row => row.join(','))
@@ -636,19 +659,20 @@ function saveEvaluationToLocal(data) {
     try {
         let evaluations = JSON.parse(localStorage.getItem('jobEvaluations')) || [];
         
-        // Añadir ID y fecha única a cada evaluación
+        const profileType = determineProfileType(data.scores.knowHow, data.scores.problemSolving);
+        const profileInfo = evaluationData.profileTypes[profileType];
+        
         const evaluationWithMeta = {
             ...data,
             id: Date.now(),
             createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
+            profileType: profileType,
+            profileName: profileInfo.name
         };
         
         evaluations.push(evaluationWithMeta);
         localStorage.setItem('jobEvaluations', JSON.stringify(evaluations));
-        
-        // Guardar también en CSV
-        saveEvaluationsToLocalCSV();
         
         return { success: true, id: evaluationWithMeta.id };
     } catch (error) {
@@ -680,14 +704,17 @@ function exportEvaluation(data, format = 'json') {
             mimeType = 'application/json';
             extension = 'json';
         } else if (format === 'csv') {
-            // Convertir a CSV
             const headers = ['Campo', 'Valor'];
+            const profileType = determineProfileType(data.scores.knowHow, data.scores.problemSolving);
+            const profileInfo = evaluationData.profileTypes[profileType];
+            
             const rows = [
                 ['Puesto', data.jobTitle],
                 ['Descripción', data.jobDescription],
                 ['Responsabilidades', data.jobResponsibilities],
                 ['Puntaje Total', data.scores.total],
                 ['Nivel', data.level.level],
+                ['Perfil Corto', profileInfo.name],
                 ['Know-How', data.scores.knowHow],
                 ['Solución Problemas', data.scores.problemSolving],
                 ['Responsabilidad', data.scores.responsibility],
@@ -722,7 +749,7 @@ function exportEvaluation(data, format = 'json') {
     }
 }
 
-// Función para generar PDF (versión mejorada de integrar2.js)
+// Función para generar PDF
 function generatePDF() {
     if (!window.currentEvaluation) {
         showNotification('No hay evaluación para generar PDF', 'error');
@@ -732,18 +759,18 @@ function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
-    // Título
+    const profileType = determineProfileType(window.currentEvaluation.scores.knowHow, window.currentEvaluation.scores.problemSolving);
+    const profileInfo = evaluationData.profileTypes[profileType];
+    
     doc.setFontSize(20);
     doc.setTextColor(67, 97, 238);
     doc.text('Evaluación de Puesto', 105, 20, { align: 'center' });
     
-    // Información básica
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     doc.text(`Puesto: ${window.currentEvaluation.jobTitle}`, 20, 40);
     doc.text(`Fecha de evaluación: ${new Date(window.currentEvaluation.evaluationDate).toLocaleDateString()}`, 20, 50);
     
-    // Descripción del puesto
     doc.setFontSize(14);
     doc.setTextColor(67, 97, 238);
     doc.text('Descripción del Puesto:', 20, 70);
@@ -752,7 +779,6 @@ function generatePDF() {
     const descriptionLines = doc.splitTextToSize(window.currentEvaluation.jobDescription || 'No especificado', 170);
     doc.text(descriptionLines, 20, 80);
     
-    // Responsabilidades
     doc.setFontSize(14);
     doc.setTextColor(67, 97, 238);
     doc.text('Responsabilidades Principales:', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 20 : 110);
@@ -761,12 +787,10 @@ function generatePDF() {
     const responsibilitiesLines = doc.splitTextToSize(window.currentEvaluation.jobResponsibilities || 'No especificado', 170);
     doc.text(responsibilitiesLines, 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 30 : 120);
     
-    // Resultados
     doc.setFontSize(16);
     doc.setTextColor(67, 97, 238);
     doc.text('Resultados de Evaluación', 20, doc.previousAutoTable ? doc.previousAutoTable.finalY + 50 : 150);
     
-    // Tabla de puntajes
     doc.autoTable({
         startY: doc.previousAutoTable ? doc.previousAutoTable.finalY + 60 : 160,
         head: [['Componente', 'Puntaje']],
@@ -783,17 +807,22 @@ function generatePDF() {
         }
     });
     
-    // Descripción del nivel
     doc.setFontSize(14);
     doc.setTextColor(67, 97, 238);
-    doc.text('Descripción del Nivel:', 20, doc.lastAutoTable.finalY + 20);
+    doc.text('Perfil Corto:', 20, doc.lastAutoTable.finalY + 20);
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Tipo: ${profileInfo.name}`, 20, doc.lastAutoTable.finalY + 30);
+    doc.text(`Descripción: ${profileInfo.description}`, 20, doc.lastAutoTable.finalY + 40);
     
+    doc.setFontSize(14);
+    doc.setTextColor(67, 97, 238);
+    doc.text('Descripción del Nivel:', 20, doc.lastAutoTable.finalY + 60);
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     const levelLines = doc.splitTextToSize(window.currentEvaluation.level.description, 170);
-    doc.text(levelLines, 20, doc.lastAutoTable.finalY + 30);
+    doc.text(levelLines, 20, doc.lastAutoTable.finalY + 70);
     
-    // Guardar el PDF
     doc.save(`Evaluacion_${window.currentEvaluation.jobTitle.replace(/\s+/g, '_')}.pdf`);
     showNotification('PDF generado correctamente', 'success');
 }
@@ -825,7 +854,6 @@ function showSaveOptionsDialog() {
     
     document.body.appendChild(dialog);
     
-    // Event listeners para los botones
     document.getElementById('saveLocalBtn').addEventListener('click', () => {
         const result = saveEvaluationToLocal(window.currentEvaluation);
         handleSaveResult(result, 'local');
@@ -861,7 +889,6 @@ function handleSaveResult(result, type) {
             : 'Evaluación guardada en CSV';
         showNotification(message, 'success');
         
-        // Actualizar lista de evaluaciones si estamos en esa vista
         if (document.getElementById('evaluationsContent') && !document.getElementById('evaluationsContent').classList.contains('hidden-content')) {
             loadEvaluationsList();
         }
@@ -872,6 +899,14 @@ function handleSaveResult(result, type) {
 
 // Función principal de evaluación
 function evaluateJob() {
+    // Validar campos requeridos primero
+    const jobTitle = document.getElementById('jobTitle').value;
+    if (!jobTitle) {
+        showNotification('Por favor ingrese el nombre del puesto', 'error');
+        return;
+    }
+
+    // Calcular puntajes
     const knowHowScore = calculateKnowHowScore();
     if (knowHowScore === null) return;
     
@@ -883,31 +918,34 @@ function evaluateJob() {
     
     const totalScore = knowHowScore + problemSolvingScore + responsibilityScore;
     const jobLevel = determineJobLevel(totalScore);
-    
-    // Mostrar resultados
+    const profileType = determineProfileType(knowHowScore, problemSolvingScore);
+    const profileInfo = evaluationData.profileTypes[profileType];
+
+    // Mostrar resultados (PERFIL CORTO VISIBLE)
     document.getElementById('totalScore').textContent = totalScore;
     document.getElementById('jobLevel').textContent = jobLevel.level;
     document.getElementById('levelDescription').textContent = jobLevel.description;
-    document.getElementById('jobDescriptionResult').textContent = document.getElementById('jobTitle').value;
+    document.getElementById('jobDescriptionResult').textContent = jobTitle;
     
+    // PERFIL CORTO - Sección nueva
+    document.getElementById('profileType').textContent = profileInfo.name;
+    document.getElementById('profileDescription').textContent = profileInfo.description;
+    document.getElementById('knowHowScore').textContent = `${knowHowScore} pts`;
+    document.getElementById('problemSolvingScore').textContent = `${problemSolvingScore} pts`;
+    document.getElementById('responsibilityScore').textContent = `${responsibilityScore} pts`;
+
     // Animaciones
     animateProgressCircle(totalScore);
     animateNumberCounter('totalScore', totalScore);
-    animateNumberCounter('knowHowScore', knowHowScore);
-    animateNumberCounter('problemSolvingScore', problemSolvingScore);
-    animateNumberCounter('responsibilityScore', responsibilityScore);
     animateProgressBars({
         knowHow: knowHowScore,
         problemSolving: problemSolvingScore,
         responsibility: responsibilityScore
     });
-    
-    // Ir a la sección de resultados
-    goToSection('results-section');
-    
-    // Preparar datos para guardar
-    const evaluationData = {
-        jobTitle: document.getElementById('jobTitle').value,
+
+    // Guardar datos para exportar
+    window.currentEvaluation = {
+        jobTitle: jobTitle,
         jobDescription: document.getElementById('jobDescription').value,
         jobResponsibilities: document.getElementById('jobResponsibilities').value,
         evaluationDate: new Date().toISOString(),
@@ -917,28 +955,27 @@ function evaluateJob() {
             responsibility: responsibilityScore,
             total: totalScore
         },
-        level: jobLevel
+        level: jobLevel,
+        profileType: profileType,
+        profileName: profileInfo.name
     };
-    
-    // Guardar en memoria para posible exportación/guardado
-    window.currentEvaluation = evaluationData;
+
+    // Ir a resultados
+    goToSection('results-section');
 }
 
-// Función para resetear la evaluación (de integrar1.js)
+// Función para resetear la evaluación
 function resetEvaluation() {
     window.currentEvaluation = null;
     
-    // Limpiar campos de texto
     document.getElementById('jobTitle').value = '';
     document.getElementById('jobDescription').value = '';
     document.getElementById('jobResponsibilities').value = '';
     
-    // Resetear todos los selects
     document.querySelectorAll('select').forEach(select => {
         select.selectedIndex = 0;
     });
     
-    // Resetear resultados visuales
     document.getElementById('totalScore').textContent = '0';
     document.getElementById('jobLevel').textContent = 'Nivel 0';
     document.getElementById('levelDescription').textContent = '';
@@ -946,13 +983,13 @@ function resetEvaluation() {
     document.getElementById('knowHowScore').textContent = '0 pts';
     document.getElementById('problemSolvingScore').textContent = '0 pts';
     document.getElementById('responsibilityScore').textContent = '0 pts';
+    document.getElementById('profileType').textContent = 'Perfil no determinado';
+    document.getElementById('profileDescription').textContent = 'No se ha determinado el perfil corto';
     
-    // Resetear barras de progreso
     document.querySelectorAll('.progress-fill').forEach(bar => {
         bar.style.width = '0%';
     });
     
-    // Resetear círculo de progreso
     const circle = document.querySelector('.progress-ring-circle');
     if (circle) {
         const radius = circle.r.baseVal.value;
@@ -1037,7 +1074,6 @@ document.head.appendChild(saveDialogStyle);
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Ocultar preloader
     setTimeout(() => {
         const preloader = document.querySelector('.preloader');
         if (preloader) {
@@ -1048,7 +1084,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
     
-    // Navegación principal
     document.getElementById('homeLink')?.addEventListener('click', (e) => {
         e.preventDefault();
         showContent('evaluationContent');
@@ -1069,7 +1104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         showContent('settingsContent');
     });
     
-    // Navegación entre pasos
     document.querySelectorAll('.step').forEach(step => {
         step.addEventListener('click', function() {
             const stepNumber = this.getAttribute('data-step');
@@ -1077,7 +1111,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Botones de navegación
     document.getElementById('nextToKnowHow')?.addEventListener('click', () => goToSection('knowhow-section'));
     document.getElementById('backToDescription')?.addEventListener('click', () => goToSection('description-section'));
     document.getElementById('nextToProblemSolving')?.addEventListener('click', () => goToSection('problem-solving-section'));
@@ -1085,10 +1118,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('nextToResponsibility')?.addEventListener('click', () => goToSection('responsibility-section'));
     document.getElementById('backToProblemSolving')?.addEventListener('click', () => goToSection('problem-solving-section'));
     
-    // Botón de evaluación
-    document.getElementById('evaluateBtn')?.addEventListener('click', evaluateJob);
+    document.getElementById('evaluateBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        evaluateJob();
+    });
     
-    // Botón de guardar
     document.getElementById('saveBtn')?.addEventListener('click', () => {
         if (window.currentEvaluation) {
             showSaveOptionsDialog();
@@ -1097,7 +1131,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Botón de exportar
     document.getElementById('exportBtn')?.addEventListener('click', () => {
         if (window.currentEvaluation) {
             exportEvaluation(window.currentEvaluation, 'json');
@@ -1106,19 +1139,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Botón de nueva evaluación
     document.getElementById('newEvalBtn')?.addEventListener('click', resetEvaluation);
-    
-    // Botón de nueva evaluación desde el header
     document.getElementById('newEvaluationBtn')?.addEventListener('click', resetEvaluation);
-    
-    // Botón para generar PDF
     document.getElementById('generatePdfBtn')?.addEventListener('click', generatePDF);
-    
-    // Botón para exportar todas las evaluaciones a CSV
     document.getElementById('exportAllBtn')?.addEventListener('click', saveEvaluationsToLocalCSV);
     
-    // Configuración inicial
     showContent('evaluationContent');
     goToSection('description-section');
 });

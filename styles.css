@@ -661,22 +661,6 @@ body {
     height: 18px;
 }
 
-/* Perfil Corto */
-.profile-info {
-    margin-top: 10px;
-}
-
-.profile-info strong {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--primary-color);
-}
-
-.profile-info p {
-    color: #666;
-    font-size: 14px;
-}
-
 @media (max-width: 1200px) {
     .sidebar {
         width: 250px;

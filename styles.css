@@ -661,27 +661,6 @@ body {
     height: 18px;
 }
 
-/* Perfil Corto */
-.profile-info {
-    margin-top: 10px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: var(--border-radius);
-}
-
-.profile-info span {
-    font-weight: 600;
-    color: var(--primary-color);
-    display: block;
-    margin-bottom: 5px;
-}
-
-.profile-info p {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-}
-
 @media (max-width: 1200px) {
     .sidebar {
         width: 250px;
